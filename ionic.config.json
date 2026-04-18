@@ -1,0 +1,7 @@
+{
+  "name": "WordSearch",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
