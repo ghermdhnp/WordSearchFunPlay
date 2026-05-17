@@ -1,0 +1,96 @@
+<ion-content class="beach-bg">
+  <div class="menu-container">
+
+    <!-- TOP BAR -->
+    <div class="top-bar-menu">
+      <div class="settings-btn" (click)="openSettings()">
+        <ion-icon name="settings-sharp"></ion-icon>
+      </div>
+    </div>
+
+    <div class="center-content">
+      <div class="custom-logo-container">
+        <div class="logo-graphics">
+          <div class="logo-pill">
+            <span class="logo-g">G</span>
+            <span class="logo-o">O</span>
+          </div>
+          <div class="logo-red-dot"></div>
+          <div class="logo-plus"></div>
+        </div>
+        <div class="logo-text-main">WORD SEARCH</div>
+        <div class="logo-text-sub">FUN PLAY</div>
+      </div>
+
+      <!-- MAIN BUTTONS -->
+      <div class="main-buttons">
+
+        <!-- Start/Continue Button -->
+        <button class="glossy-btn btn-green" (click)="continueGame()">
+          <div class="btn-inner">
+            <ion-icon [name]="hasSavedGame ? 'play-forward' : 'play'"></ion-icon>
+            <span>{{ hasSavedGame ? 'LANJUTKAN' : 'MULAI' }}</span>
+          </div>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS POPUP -->
+  <div class="popup-overlay" *ngIf="showSettings">
+    <div class="settings-modal">
+
+      <button class="close-btn glossy-btn btn-blue" (click)="closeSettings()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+
+      <h2>Pengaturan</h2>
+
+      <div class="settings-list">
+
+        <!-- MUSIK -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-icon btn-blue glossy-btn">
+              <ion-icon name="musical-notes"></ion-icon>
+            </div>
+            <span>Musik</span>
+          </div>
+          <div class="custom-toggle" [class.active]="audioService.settings.music" (click)="toggleMusic()">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <!-- EFEK SUARA -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-icon btn-orange glossy-btn">
+              <ion-icon name="volume-high"></ion-icon>
+            </div>
+            <span>Efek Suara</span>
+          </div>
+          <div class="custom-toggle" [class.active]="audioService.settings.sfx" (click)="toggleSfx()">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <!-- GETAR -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-icon btn-green glossy-btn">
+              <ion-icon name="phone-portrait"></ion-icon>
+            </div>
+            <span>Getar</span>
+          </div>
+          <div class="custom-toggle" [class.active]="audioService.settings.vibration" (click)="toggleVibration()">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</ion-content>

@@ -1,0 +1,73 @@
+.intro-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.sunburst-logo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -10vh;
+}
+
+.logo-circle {
+  width: 200px;
+  height: 200px;
+  background: white;
+  border-radius: 50%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2), inset 0 -10px 20px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.logo-text-bold {
+  color: #ff6b00;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 1.8rem;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.logo-text-script {
+  color: #ff3300;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.5rem;
+  margin-top: -5px;
+  transform: rotate(-10deg);
+  text-shadow: 2px 2px 0px white, 3px 3px 0px rgba(0,0,0,0.1);
+}
+
+.loading-bottom {
+  position: absolute;
+  bottom: 50px;
+  text-align: center;
+  
+  .loading-text {
+    font-size: 0.8rem;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+  }
+}
+
+.dots::after {
+  content: '';
+  animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+  0% { content: ''; }
+  33% { content: '.'; }
+  66% { content: '..'; }
+  100% { content: '...'; }
+}

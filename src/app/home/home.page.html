@@ -1,20 +1,154 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="beach-bg" [scrollY]="false">
+  <div class="game-container">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <!-- TOP BAR -->
+    <div class="top-bar-game">
+      <button class="glossy-btn round-sm btn-blue" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+      <div class="level-pill glossy-btn btn-blue">
+        LEVEL {{ currentLevelIndex + 1 }}
+      </div>
+
+      <div class="settings-btn" (click)="openSettings()">
+        <ion-icon name="settings-sharp"></ion-icon>
+      </div>
+    </div>
+
+    <!-- PANEL KATA (ATAS) -->
+    <div class="word-panel-top">
+      <div class="panel-title">Kata yang dicari</div>
+      <div class="word-pills">
+        <span *ngFor="let word of words" class="word-pill" [class.found]="foundWords.includes(word)">
+          {{ word }}
+        </span>
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid-board" #gridBoard>
+
+      <!-- GARIS WARNA -->
+      <svg class="lines">
+        <line *ngFor="let line of lines" [attr.x1]="getCellCenter(line.path[0].row, line.path[0].col).x"
+          [attr.y1]="getCellCenter(line.path[0].row, line.path[0].col).y"
+          [attr.x2]="getCellCenter(line.path[line.path.length-1].row, line.path[line.path.length-1].col).x"
+          [attr.y2]="getCellCenter(line.path[line.path.length-1].row, line.path[line.path.length-1].col).y"
+          [attr.stroke]="line.color" [attr.stroke-width]="200 / gridSize" stroke-linecap="round" stroke-opacity="0.9">
+        </line>
+
+        <!-- GARIS SAAT DRAG -->
+        <line *ngIf="isDragging && currentPath.length > 0"
+          [attr.x1]="getCellCenter(currentPath[0].row, currentPath[0].col).x"
+          [attr.y1]="getCellCenter(currentPath[0].row, currentPath[0].col).y"
+          [attr.x2]="getCellCenter(currentPath[currentPath.length-1].row, currentPath[currentPath.length-1].col).x"
+          [attr.y2]="getCellCenter(currentPath[currentPath.length-1].row, currentPath[currentPath.length-1].col).y"
+          [attr.stroke]="currentColor" [attr.stroke-width]="200 / gridSize" stroke-linecap="round" stroke-opacity="0.9">
+        </line>
+      </svg>
+
+      <!-- GRID HURUF -->
+      <div class="grid-wrapper" 
+           [style.grid-template-columns]="'repeat(' + gridSize + ', 1fr)'"
+           [style.--dynamic-font]="(180 / gridSize) + 'px'">
+        <ng-container *ngFor="let row of grid; let i = index">
+          <ng-container *ngFor="let col of row; let j = index">
+            <span [attr.data-row]="i" [attr.data-col]="j" 
+              [class.selected]="isInPath(i, j)"
+              [class.hinted]="isHinted(i, j)"
+              [style.color]="isInPath(i, j) ? '#fff' : '#000'">
+              {{ col }}
+            </span>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="bottom-bar-game">
+
+      <div class="hint-container">
+        <button class="glossy-btn round-md btn-blue" (click)="useHint()">
+          <ion-icon name="bulb-outline"></ion-icon>
+        </button>
+        <div class="badge">{{ hintCount }}</div>
+      </div>
+
+      <div class="score-panel">
+        <div class="score-label">Ditemukan</div>
+        <div class="score-value">{{ foundWords.length }} / {{ words.length }}</div>
+      </div>
+
+      <div class="reset-container">
+        <button class="glossy-btn round-md btn-blue" (click)="resetGame()">
+          <ion-icon name="refresh-outline"></ion-icon>
+        </button>
+      </div>
+
+    </div>
+
   </div>
+
+  <!-- POPUP HEBAT -->
+  <div class="hebat-popup" *ngIf="showHebat">
+    <h2>HEBAT!</h2>
+  </div>
+
+  <!-- SETTINGS POPUP -->
+  <div class="popup-overlay" *ngIf="showSettings">
+    <div class="settings-modal">
+
+      <button class="close-btn glossy-btn btn-blue" (click)="closeSettings()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+
+      <h2>Pengaturan</h2>
+
+      <div class="settings-list">
+
+        <!-- MUSIK -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-icon btn-blue glossy-btn">
+              <ion-icon name="musical-notes"></ion-icon>
+            </div>
+            <span>Musik</span>
+          </div>
+          <div class="custom-toggle" [class.active]="audioService.settings.music" (click)="toggleMusic()">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <!-- EFEK SUARA -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-icon btn-orange glossy-btn">
+              <ion-icon name="volume-high"></ion-icon>
+            </div>
+            <span>Efek Suara</span>
+          </div>
+          <div class="custom-toggle" [class.active]="audioService.settings.sfx" (click)="toggleSfx()">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <!-- GETAR -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-icon btn-green glossy-btn">
+              <ion-icon name="phone-portrait"></ion-icon>
+            </div>
+            <span>Getar</span>
+          </div>
+          <div class="custom-toggle" [class.active]="audioService.settings.vibration" (click)="toggleVibration()">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
 </ion-content>

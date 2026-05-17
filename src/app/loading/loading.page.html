@@ -1,0 +1,31 @@
+<ion-content class="beach-bg">
+  <div class="loading-container">
+    <div class="custom-logo-container">
+      <div class="logo-graphics">
+        <div class="logo-pill">
+          <span class="logo-g">G</span>
+          <span class="logo-o">O</span>
+        </div>
+        <div class="logo-red-dot"></div>
+        <div class="logo-plus"></div>
+      </div>
+      <div class="logo-text-main">WORD SEARCH</div>
+      <div class="logo-text-sub">FUN PLAY</div>
+    </div>
+
+    <div class="bottom-section">
+      <p class="loading-text">Loading<span class="dots"></span></p>
+
+      <div class="progress-wrapper">
+        <div class="progress-bar-glossy">
+          <div class="progress-fill-glossy" [style.width.%]="progress">
+            <div class="progress-glow"></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="percentage-text">{{ progress | number:'1.0-0' }}%</p>
+    </div>
+
+  </div>
+</ion-content>
