@@ -1,7 +1,6 @@
 <ion-content class="beach-bg">
   <div class="menu-container">
 
-    <!-- TOP BAR -->
     <div class="top-bar-menu">
       <div class="settings-btn" (click)="openSettings()">
         <ion-icon name="settings-sharp"></ion-icon>
@@ -22,10 +21,8 @@
         <div class="logo-text-sub">FUN PLAY</div>
       </div>
 
-      <!-- MAIN BUTTONS -->
       <div class="main-buttons">
 
-        <!-- Start/Continue Button -->
         <button class="glossy-btn btn-green" (click)="continueGame()">
           <div class="btn-inner">
             <ion-icon [name]="hasSavedGame ? 'play-forward' : 'play'"></ion-icon>
@@ -37,7 +34,6 @@
     </div>
   </div>
 
-  <!-- SETTINGS POPUP -->
   <div class="popup-overlay" *ngIf="showSettings">
     <div class="settings-modal">
 
@@ -49,7 +45,6 @@
 
       <div class="settings-list">
 
-        <!-- MUSIK -->
         <div class="setting-item">
           <div class="setting-info">
             <div class="setting-icon btn-blue glossy-btn">
@@ -62,7 +57,6 @@
           </div>
         </div>
 
-        <!-- EFEK SUARA -->
         <div class="setting-item">
           <div class="setting-info">
             <div class="setting-icon btn-orange glossy-btn">
@@ -75,7 +69,6 @@
           </div>
         </div>
 
-        <!-- GETAR -->
         <div class="setting-item">
           <div class="setting-info">
             <div class="setting-icon btn-green glossy-btn">

@@ -15,6 +15,7 @@
         android:theme="@style/AppTheme">
 
         <activity
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
             android:name="io.ionic.starter.MainActivity"
             android:theme="@style/AppTheme.NoActionBarLaunch"

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AudioService } from '../services/audio.service';
+import { Platform } from '@ionic/angular';
+import { App } from '@capacitor/app';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -10,10 +13,12 @@ import { AudioService } from '../services/audio.service';
 })
 export class MenuPage {
   showSettings: boolean = false;
+  private backButtonSub?: Subscription;
 
   constructor(
     private router: Router,
-    public audioService: AudioService
+    public audioService: AudioService,
+    private platform: Platform
   ) {}
 
   hasSavedGame: boolean = false;
@@ -23,8 +28,23 @@ export class MenuPage {
     this.hasSavedGame = savedLevel !== null && parseInt(savedLevel, 10) > 0;
   }
 
+  ionViewDidEnter() {
+    this.backButtonSub = this.platform.backButton.subscribeWithPriority(10, () => {
+      if (this.showSettings) {
+        this.closeSettings();
+      } else {
+        App.exitApp();
+      }
+    });
+  }
+
+  ionViewWillLeave() {
+    if (this.backButtonSub) {
+      this.backButtonSub.unsubscribe();
+    }
+  }
+
   ngOnInit() {
-    // Coba putar musik saat menu terbuka (akan tertahan browser sampai ada sentuhan)
     this.audioService.playBgm();
   }
 

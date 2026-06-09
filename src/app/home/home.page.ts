@@ -1,7 +1,8 @@
 import { Component, HostListener, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AudioService } from '../services/audio.service';
-import { GestureController } from '@ionic/angular';
+import { GestureController, Platform, NavController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -13,11 +14,15 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('gridBoard', { read: ElementRef }) gridBoard!: ElementRef;
 
+  private backButtonSub?: Subscription;
+
   constructor(
     public audioService: AudioService,
     private router: Router,
     private gestureCtrl: GestureController,
-    private zone: NgZone
+    private zone: NgZone,
+    private platform: Platform,
+    private navCtrl: NavController
   ) { }
 
   // ===== DATA =====
@@ -181,6 +186,22 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
     this.setLevel();
   }
 
+  ionViewDidEnter() {
+    this.backButtonSub = this.platform.backButton.subscribeWithPriority(10, () => {
+      if (this.showSettings) {
+        this.closeSettings();
+      } else {
+        this.goBack();
+      }
+    });
+  }
+
+  ionViewWillLeave() {
+    if (this.backButtonSub) {
+      this.backButtonSub.unsubscribe();
+    }
+  }
+
   ngOnDestroy() {
     // Music plays globally now, so we don't stop it when leaving home
   }
@@ -290,7 +311,7 @@ export class HomePage implements OnInit, OnDestroy, AfterViewInit {
 
   goBack() {
     this.audioService.playSfx('click');
-    this.router.navigate(['/menu']);
+    this.navCtrl.navigateBack('/menu');
   }
 
   getRandomWords(theme: string[], count: number) {
